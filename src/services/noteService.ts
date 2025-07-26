@@ -8,13 +8,17 @@ interface FetchNotesResponse {
   totalPages: number;
 }
 
-export const fetchNotes = async (page: number): Promise<FetchNotesResponse> => {
+export const fetchNotes = async (
+  page: number,
+  params: string
+): Promise<FetchNotesResponse> => {
   const response = await axios.get<FetchNotesResponse>(
     `https://notehub-public.goit.study/api/notes?`,
     {
       params: {
         page,
         perPage: 12,
+        ...(params.trim() !== "" && { search: params }),
       },
       headers: {
         Authorization: `Bearer ${myToken}`,
@@ -26,7 +30,7 @@ export const fetchNotes = async (page: number): Promise<FetchNotesResponse> => {
   return response.data;
 };
 
-export const createNote = async (noteData: NewNoteData) => {
+export const createNote = async (noteData: NewNoteData): Promise<Note> => {
   const response = await axios.post<Note>(
     `https://notehub-public.goit.study/api/notes?`,
     noteData,
@@ -39,7 +43,7 @@ export const createNote = async (noteData: NewNoteData) => {
   return response.data;
 };
 
-export const deleteNote = async (noteId: number) => {
+export const deleteNote = async (noteId: number): Promise<Note> => {
   const response = await axios.delete<Note>(
     `https://notehub-public.goit.study/api/notes/${noteId}`,
     {

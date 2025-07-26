@@ -1,20 +1,22 @@
 import { useEffect, useState } from "react";
-import { Formik } from "formik";
 
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
+import { useDebouncedCallback } from "use-debounce";
 
 import css from "./App.module.css";
-import type { Note } from "../../types/note";
 import { fetchNotes } from "../../services/noteService";
 import NoteList from "../NoteList/NoteList";
-import ReactPaginate from "react-paginate";
 import Pagination from "../Pagination/Pagination";
 import Modal from "../Modal/Modal";
 import NoteForm from "../NoteForm/NoteForm";
+import SearchBox from "../SearchBox/SearchBox";
+import toast, { Toaster } from "react-hot-toast";
+import Loader from "../Loader/Loader";
+import ErrorMessage from "../ErrorMessage/ErrorMessage";
 
 function App() {
   // const [notes, setNotes] = useState<Note | null>(null);
-  const [noteName, setNoteName] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -22,17 +24,31 @@ function App() {
   const closeModal = () => setIsModalOpen(false);
 
   const { data, isLoading, isError, isSuccess } = useQuery({
-    queryKey: ["notes", currentPage],
-    queryFn: () => fetchNotes(currentPage),
+    queryKey: ["notes", currentPage, searchQuery],
+    queryFn: () => fetchNotes(currentPage, searchQuery),
+    placeholderData: keepPreviousData,
   });
 
   const totalPages = data?.totalPages ?? 0;
+
+  const updateSearchQuery = useDebouncedCallback(setSearchQuery, 1000);
+
+  useEffect(() => {
+    if (data && data.notes.length === 0) {
+      toast.error("No movies found for your request");
+    }
+  }, [data]);
+
+  // const updateSearchQuery = useDebouncedCallback(
+  //   (e: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(e.target.value),
+  //   300
+  // );
 
   return (
     <>
       <div className={css.app}>
         <header className={css.toolbar}>
-          {/* Компонент SearchBox */}
+          <SearchBox value={searchQuery} onSearch={updateSearchQuery} />
           {isSuccess && totalPages > 1 && (
             <Pagination
               totalPages={totalPages}
@@ -45,6 +61,9 @@ function App() {
           </button>
         </header>
       </div>
+      <Toaster position="top-right" />
+      {isLoading && <Loader />}
+      {isError && <ErrorMessage />}
       {isSuccess && data !== undefined && data.notes.length > 0 && (
         <NoteList notes={data.notes} />
       )}
