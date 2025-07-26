@@ -15,7 +15,6 @@ import Loader from "../Loader/Loader";
 import ErrorMessage from "../ErrorMessage/ErrorMessage";
 
 function App() {
-  // const [notes, setNotes] = useState<Note | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -35,14 +34,9 @@ function App() {
 
   useEffect(() => {
     if (data && data.notes.length === 0) {
-      toast.error("No movies found for your request");
+      toast.error("No notes found for your request");
     }
   }, [data]);
-
-  // const updateSearchQuery = useDebouncedCallback(
-  //   (e: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(e.target.value),
-  //   300
-  // );
 
   return (
     <>
