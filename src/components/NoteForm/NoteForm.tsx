@@ -32,7 +32,7 @@ interface OrderFormValues {
 const initialValues: OrderFormValues = {
   title: "",
   content: "",
-  tag: "Todo",
+  tag: "",
 };
 
 export default function NoteForm({ onClose }: NoteFormProps) {
