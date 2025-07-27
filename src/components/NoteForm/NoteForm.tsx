@@ -26,7 +26,7 @@ const OrderFormSchema = Yup.object().shape({
 interface OrderFormValues {
   title: string;
   content: string;
-  tag: string;
+  tag: "Todo"| "Work" | "Personal" | "Meeting" | "Shopping";
 }
 
 const initialValues: OrderFormValues = {
