@@ -14,10 +14,10 @@ interface NoteFormProps {
 
 const OrderFormSchema = Yup.object().shape({
   title: Yup.string()
-    .min(3, "Title must be at least 2 characters")
+    .min(3, "Title must be at least 3 characters")
     .max(50, "Title is too long")
     .required("Title is required"),
-  content: Yup.string().max(500, "Title is too long"),
+  content: Yup.string().max(500, "Content is too long"),
   tag: Yup.string()
     .oneOf(["Todo", "Work", "Personal", "Meeting", "Shopping"])
     .required("Tag is required"),
@@ -32,7 +32,7 @@ interface OrderFormValues {
 const initialValues: OrderFormValues = {
   title: "",
   content: "",
-  tag: "",
+  tag: "Todo",
 };
 
 export default function NoteForm({ onClose }: NoteFormProps) {
@@ -53,7 +53,6 @@ export default function NoteForm({ onClose }: NoteFormProps) {
     values: OrderFormValues,
     formikHelpers: FormikHelpers<OrderFormValues>
   ) => {
-    console.log("Order data:", values);
     mutate(values);
     formikHelpers.resetForm();
   };

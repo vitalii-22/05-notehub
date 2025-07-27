@@ -30,7 +30,10 @@ function App() {
 
   const totalPages = data?.totalPages ?? 0;
 
-  const updateSearchQuery = useDebouncedCallback(setSearchQuery, 1000);
+  const updateSearchQuery = useDebouncedCallback((query) => {
+    setCurrentPage(1);
+    setSearchQuery(query);
+  }, 1000);
 
   useEffect(() => {
     if (data && data.notes.length === 0) {
