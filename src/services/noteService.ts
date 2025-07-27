@@ -26,8 +26,6 @@ export const fetchNotes = async (
     }
   );
 
-  console.log(myToken);
-
   return response.data;
 };
 

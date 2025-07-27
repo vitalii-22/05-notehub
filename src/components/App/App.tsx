@@ -13,7 +13,6 @@ import SearchBox from "../SearchBox/SearchBox";
 import toast, { Toaster } from "react-hot-toast";
 import Loader from "../Loader/Loader";
 import ErrorMessage from "../ErrorMessage/ErrorMessage";
-console.log("TOKEN:", import.meta.env.VITE_NOTEHUB_TOKEN);
 
 function App() {
   const [searchQuery, setSearchQuery] = useState("");
